@@ -1,5 +1,6 @@
-# Uchit Shriyan
+# AME494598Fall2023
 
-# ame598_programming_IoT
+# Name: Uchit Shriyan
 
-# This is my github repository for the class AME 598: Programming for the Internet of Things
+# ASU ID: 1225616938
+
