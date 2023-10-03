@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <script src='asyncReq.js'></script>
+    <script>
+        function updateData() {
+            loadURL("./getData", function(data) {
+                document.getElementById("results").innerHTML = data;
+            })
+        }
+
+        function start() {
+            setInterval("updateData()", 300);
+        }
+    </script>
+</head>
+<body onload='start()'>
+    <h1>Temperature/Humidity</h1>
+    
+<div id="tutorial">
+  <h2>Step-by-Step Guide: Setting up Temperature and Humidity Monitoring</h2>
+  
+  <li>
+    <strong>Hardware Setup:</strong> 
+    <ul>
+        <li>Gather parts required: TTGO Watch, DHT11 Sensor Module, USB cable to connect to laptop/computer, cable to connect sensor and watch<br><br><img src="./images/hardware.jpg" alt="TTGO Watch Image" width="300"></li>
+        <br><li>Connect the sensor to the TTGO watch using the GPIO port and the TTGO watch to the laptop using USB cable<br><br><img src="./images/hardware_connect.jpg" alt="DHT11 Connection Image" width="300"></li>
+    </ul>
+  </li>
+
+  
+  <li>
+      <strong>ESP32 Code Deployment:</strong> <img src="./images/ide_overview.jpg" alt="IDE Overview">
+      <ul>
+          <li>Open the ESP32 code provided in the handout with your preferred IDE. <img src="./images/code_loading.jpg" alt="Loading Code" width="200"></li>
+          <li>Modify the WiFi SSID and password in the code to match your network settings. <img src="./images/wifi_settings.jpg" alt="WiFi Settings" width="200"></li>
+          <li>Upload the code to the ESP32. <img src="./images/code_upload.jpg" alt="Uploading Code" width="200"></li>
+      </ul>
+  </li>
+  
+  <!-- Step 3: Server Setup on EC2 -->
+  <li>
+      <strong>Server Setup on EC2:</strong> <img src="./images/ec2_dashboard.jpg" alt="EC2 Dashboard">
+      <ul>
+          <li>Log in to your AWS Management Console and navigate to EC2. <img src="./images/aws_login.jpg" alt="AWS Login" width="200"></li>
+          <li>Start your EC2 instance. <img src="./images/ec2_start.jpg" alt="Starting EC2 Instance" width="200"></li>
+          <li>Deploy the server code to your EC2 instance. <img src="./images/server_deploy.jpg" alt="Deploying Server" width="200"></li>
+      </ul>
+  </li>
+
+  <!-- Step 4: Viewing Data on Browser -->
+  <li>
+      <strong>Viewing Data on Browser:</strong> <img src="./images/browser_overview.jpg" alt="Browser Overview">
+      <ul>
+          <li>Open a web browser and navigate to the IP address of your EC2 instance. <img src="./images/browser_navigation.jpg" alt="Navigating in Browser" width="200"></li>
+          <li>The webpage should display the temperature and humidity readings. <img src="./images/temperature_display.jpg" alt="Temperature Display" width="200"></li>
+      </ul>
+  </li>
+</div>
+<!-- End of tutorial section -->
+
+</body>
+</html>
