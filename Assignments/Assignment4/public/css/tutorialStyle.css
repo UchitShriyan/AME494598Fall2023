@@ -1,0 +1,53 @@
+/* Basic styling for the entire tutorial */
+#tutorial {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #d1d1d1;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+/* Styling for the main headers of each step */
+#tutorial h2 {
+    border-bottom: 2px solid #007BFF;
+    padding-bottom: 10px;
+    color: #3b26fa;
+    font-size: 36px;
+}
+
+#tutorial strong {
+    display: block;
+    margin-top: 20px;
+    color: #007BFF;
+    font-size: 24px;
+}
+
+/* Styling for the lists */
+#tutorial ul {
+    list-style-type: none; /* This removes bullets from the list */
+}
+
+#tutorial li {
+    margin: 15px;
+    font-size: 20px;
+}
+
+/* Styling for images */
+#tutorial img {
+    width: 40%; /* Makes sure images aren't too wide */
+    border: 1px solid #d1d1d1;
+    border-radius: 10px;
+    margin-top: 10px;
+    transition: transform 0.3s ease;
+}
+
+#tutorial img:hover {
+    transform: scale(1.05); /* Slightly enlarges the image on hover */
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
