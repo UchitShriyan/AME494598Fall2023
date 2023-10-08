@@ -35,7 +35,7 @@
 
 /* Styling for images */
 #tutorial img {
-    width: 40%; /* Makes sure images aren't too wide */
+    width: 50%; /* Makes sure images aren't too wide */
     border: 1px solid #d1d1d1;
     border-radius: 10px;
     margin-top: 10px;

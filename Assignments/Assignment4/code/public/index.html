@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
     <script src='asyncReq.js'></script>
     <link rel="stylesheet" type="text/css" href="css/tutorialStyle.css">
@@ -15,72 +16,170 @@
         }
     </script>
 </head>
+
 <body onload='start()'>
     <h1>Temperature/Humidity</h1>
     <div id='results'> </div>
-    
-<div id="tutorial">
-  <h2>Step-by-Step Guide: Setting up Server and Hardware for Temperature and Humidity Monitoring</h2>
-  
-    <strong>Hardware Setup:</strong> 
-    <ul>
-        <li>Step 1: Gather parts required: TTGO Watch, DHT11 Sensor Module, USB cable to connect TTGO Watch to laptop/computer, cable to connect sensor to the watch<br><br><img src="./images/hardware.jpg" alt="TTGO Watch Image" class="center"></li>
-        <br><li>Step 2: Connect the sensor to the TTGO watch using the GPIO port and the TTGO watch to the laptop using USB cable<br><br><img src="./images/hardware_connect.jpg" alt="DHT11 Connection Image" class="center" width="400"></li>
-    </ul>
-  
-    <br><strong>Setting up the software environment:</strong>
-    <ul>
-        <li>Step 1: Download and install the latest version of <a href="https://www.arduino.cc/en/software">Arduino IDE</a><br><br><img src="./images/arduino_install.jpg" class="center"> </li>
-        <br><li>Step 2: Once Arduino IDE is installed, open it, go to board manager (Tools -> Board -> Board Manager), search for ESP32 and install esp32 by Espressif Systems <br><br><img src="./images/arduino_board.jpg" class="center"></li>
-        <br><li>Step 3: Install USB to UART <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads">Driver</a> <br><br><img src="./images/USB_Driver.jpg" class="center"></li>
-        <br><li>Step 4: Download the <a href="https://github.com/Xinyuan-LilyGO/TTGO_TWatch_Library">T-Watch Library</a> <br><br><img src="./images/TWatch_lib.jpg" class="center"></li>
-        <br><li>Step 5: Add the TWatch Library to Arduino IDE (Sketch -> Include Library -> Add .ZIP Library -> Select the ZIP file) <br><br><img src="./images/add_lib.jpg" class="center"></li>
-    </ul>
 
-      <br><strong>ESP32 Code Deployment:</strong>
-      <ul>
-        <li>Step 1: Clone the following <a href="https://github.com/tejaswigowda/ame498-598Fall2023/">GitHub repository</a> using the command in command prompt or shell
-            <br>(Make sure you have <a href="https://git-scm.com/">Git</a> installed)<br><br>
-            <code>git clone https://github.com/tejaswigowda/ame498-598Fall2023.git</code>
-            <br><br>
-            <img src="./images/github_repo.jpg" alt="github repo" class="center">
+    <div id="tutorial">
+        <h2>Step-by-Step Guide: Setting up Server and Hardware for Temperature and Humidity Monitoring</h2>
+
+        <strong>Hardware Setup:</strong>
+        <ul>
+            <li>Step 1: Gather parts required: TTGO Watch, DHT11 Sensor Module, USB cable to connect TTGO Watch to laptop/computer, cable to connect sensor to the watch<br><br>
+                <a href="./images/hardware.jpg" target="_blank">
+                    <img src="./images/hardware.jpg" alt="TTGO Watch Image" class="center">
+                </a>
             </li>
-        <br><li>Step 2: Setup a Hotspot to connect the TTGO Watch to the server </li>
-        <br><li>Step 3: After completing the Hardware and Software setup, make the changes in your code (Hotspot details and Public IP of your EC2 Instance) and deploy the code on the TTGO Watch<br><br><img src="./images/arduino_deploy.jpg" class="center"></li>
-      </ul>
+            <li>Step 2: Connect the sensor to the TTGO watch using the GPIO port and the TTGO watch to the laptop using USB cable<br><br>
+                <a href="./images/hardware_connect.jpg" target="_blank">
+                    <img src="./images/hardware_connect.jpg" alt="DHT11 Connection Image" class="center" width="400">
+                </a>
+            </li>
+        </ul>
 
-      <br><strong>Server Setup on EC2:</strong>
-      <ul>
-          <li>Step 1: Log in to your AWS Academy Canvas portal and navigate to Sandbox situated in Modules <br><br><img src="./images/sandbox_sel.jpg" class="center"> </li>
-          <br><li>Step 2: Click on Start Lab and wait or the red dot next to AWS turn green and then click on it <br><br><img src="./images/sandbox_home.jpg" class="center"> </li>
-          <br><li>Step 3: In the search bar, search for EC2 and click on it <br><br><img src="./images/console_home.jpg" class="center"> </li>
-          <br><li>Step 4: Click on Launch instance <br><br><img src="./images/launch_instance.jpg" class="center"> </li>
-          <br><li>Step 5: Name your server and for the Amazon Machine Image select Ubuntu Server 20.04 LTS <br><br><img src="./images/name_OS.jpg" class="center"> </li>
-          <br><li>Step 6: Scroll down. You may choose to proceed without a key pair. Change the storage to 28 GiB and then click on Launch Instance <br><br><img src="./images/name_OS2.jpg" class="center"> </li>
-          <br><li>Step 7: Select the instance, go to the Security tab and click on the Security groups <br><br><img src="./images/instance_setting.jpg" class="center"> </li>
-          <br><li>Step 8: Click on Edit inbound rules <br><br><img src="./images/edit_rules.jpg" class="center"> </li>
-          <br><li>Step 9: Add rule(s) as per your requirement. Generally, it is the 1234 port (set source to Anywher IPv4) and 8080 port (set source to MyIP) <br><br><img src="./images/security_rules.jpg" class="center"> </li>
-          <br><li>Step 10: Go back to instances, select your instance and click on Connect <br><br><img src="./images/instance.jpg" class="center"> </li>
-          <br><li>Step 11: Select the instance, go to the Security tab and click on the Security groups <br><br><img src="./images/instance_setting.jpg" class="center"> </li>
-          <br><li>Step 12: A new tab will open giving you access to the instance console<br><br><img src="./images/instance_console.jpg" class="center"> 
-          <br><li>Step 13: In the console add the following commands <br><br>
-            <code>curl -s https://gist.githubusercontent.com/tejaswigowda/f289e9bff13d152876e8d4b3281142f8/raw/df37df2e16a3166e686357a045751a7c18bbeebe/installNodeMongoUbuntu16.04.sh  | bash
-                <br><br>sudo npm install -g a<br><br>sudo npm install -g http-server <br><br>npm install mongoskin <br><br>npm install mongodb
-            </code></li>
-          <br><li>Step 14: Clone your own repository with the code for the server by putting in the following in your instance console <br><br>
-            If public repo: <code>git clone https://github.com/tejaswigowda/ame498-598Fall2023.git></code><br><br>
-            If private repo, generate a token in setting of your github: <code>git clone https://[token]@github.com/tejaswigowda/ame498-598Fall2023.git</code><br><br>
-            <img src="./images/instance_setting.jpg" class="center"> </li>
-          <br><li>Step 15: Navigate to the folder that contains the server.js file <br><br>
-            
-            <img src="./images/sandbox_home.jpg" class="center"> </li>
-      </ul>
+        <strong>Setting up the software environment:</strong>
+        <ul>
+            <li>Step 1: Download and install the latest version of <a href="https://www.arduino.cc/en/software">Arduino IDE</a><br><br>
+                <a href="./images/arduino_install.jpg" target="_blank">
+                    <img src="./images/arduino_install.jpg" class="center">
+                </a>
+            </li>
+            <li>Step 2: Once Arduino IDE is installed, open it, go to board manager (Tools -> Board -> Board Manager), search for ESP32 and install esp32 by Espressif Systems <br><br>
+                <a href="./images/arduino_board.jpg" target="_blank">
+                    <img src="./images/arduino_board.jpg" class="center">
+                </a>
+            </li>
+            <li>Step 3: Install USB to UART <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads">Driver</a> <br><br>
+                <a href="./images/USB_Driver.jpg" target="_blank">
+                    <img src="./images/USB_Driver.jpg" class="center">
+                </a>
+            </li>
+            <li>Step 4: Download the <a href="https://github.com/Xinyuan-LilyGO/TTGO_TWatch_Library">T-Watch Library</a> <br><br>
+                <a href="./images/TWatch_lib.jpg" target="_blank">
+                    <img src="./images/TWatch_lib.jpg" class="center">
+                </a>
+            </li>
+            <li>Step 5: Add the TWatch Library to Arduino IDE (Sketch -> Include Library -> Add .ZIP Library -> Select the ZIP file) <br><br>
+                <a href="./images/add_lib.jpg" target="_blank">
+                    <img src="./images/add_lib.jpg" class="center">
+                </a>
+            </li>
+        </ul>
 
-      <strong>Viewing Data on Browser:</strong>
-      <ul>
-          <li>Open a web browser and navigate to the IP address of your EC2 instance. <img src="./images/browser_navigation.jpg" alt="Navigating in Browser" width="200"></li>
-          <li>The webpage should display the temperature and humidity readings. <img src="./images/temperature_display.jpg" alt="Temperature Display" width="200"></li>
-      </ul>
-</div>
-</body>
-</html>
+        <strong>ESP32 Code Deployment:</strong>
+        <ul>
+            <li>Step 1: Clone the following <a href="https://github.com/tejaswigowda/ame498-598Fall2023/">GitHub repository</a> using the command in command prompt or shell
+                <br>(Make sure you have <a href="https://git-scm.com/">Git</a> installed)<br><br>
+                <code>git clone https://github.com/tejaswigowda/ame498-598Fall2023.git</code>
+                <br><br>
+                <a href="./images/github_repo.jpg" target="_blank">
+                    <img src="./images/github_repo.jpg" alt="github repo" class="center">
+                </a>
+            </li>
+            <li>Step 2: Setup a Hotspot to connect the TTGO Watch to the server </li>
+            <li>Step 3: After completing the Hardware and Software setup, make the changes in your code (Hotspot details and Public IP of your EC2 Instance) and deploy the code on the TTGO Watch<br><br>
+                <a href="./images/arduino_deploy.jpg" target="_blank">
+                    <img src="./images/arduino_deploy.jpg" class="center">
+                </a>
+                </li>
+            </ul>
+    
+            <strong>Server Setup on EC2:</strong>
+            <ul>
+                <li>Step 1: Log in to your AWS Academy Canvas portal and navigate to Sandbox situated in Modules <br><br>
+                    <a href="./images/sandbox_sel.jpg" target="_blank">
+                        <img src="./images/sandbox_sel.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 2: Click on Start Lab and wait for the red dot next to AWS to turn green and then click on it <br><br>
+                    <a href="./images/sandbox_home.jpg" target="_blank">
+                        <img src="./images/sandbox_home.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 3: In the search bar, search for EC2 and click on it <br><br>
+                    <a href="./images/console_home.jpg" target="_blank">
+                        <img src="./images/console_home.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 4: Click on Launch instance <br><br>
+                    <a href="./images/launch_instance.jpg" target="_blank">
+                        <img src="./images/launch_instance.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 5: Name your server and for the Amazon Machine Image select Ubuntu Server 20.04 LTS <br><br>
+                    <a href="./images/name_OS.jpg" target="_blank">
+                        <img src="./images/name_OS.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 6: Scroll down. You may choose to proceed without a key pair. Change the storage to 28 GiB and then click on Launch Instance <br><br>
+                    <a href="./images/name_OS2.jpg" target="_blank">
+                        <img src="./images/name_OS2.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 7: Select the instance, go to the Security tab and click on the Security groups <br><br>
+                    <a href="./images/instance_setting.jpg" target="_blank">
+                        <img src="./images/instance_setting.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 8: Click on Edit inbound rules <br><br>
+                    <a href="./images/edit_rules.jpg" target="_blank">
+                        <img src="./images/edit_rules.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 9: Add rule(s) as per your requirement. Generally, it is the 1234 port (set source to Anywher IPv4) and 8080 port (set source to MyIP) <br><br>
+                    <a href="./images/security_rules.jpg" target="_blank">
+                        <img src="./images/security_rules.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 10: Go back to instances, select your instance and click on Connect <br><br>
+                    <a href="./images/instance.jpg" target="_blank">
+                        <img src="./images/instance.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 11: Select the instance, go to the Security tab and click on the Security groups <br><br>
+                    <a href="./images/instance_setting.jpg" target="_blank">
+                        <img src="./images/instance_setting.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 12: A new tab will open giving you access to the instance console<br><br>
+                    <a href="./images/instance_console.jpg" target="_blank">
+                        <img src="./images/instance_console.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 13: In the console, add the following commands <br><br>
+                    <code>curl -s https://gist.githubusercontent.com/tejaswigowda/f289e9bff13d152876e8d4b3281142f8/raw/df37df2e16a3166e686357a045751a7c18bbeebe/installNodeMongoUbuntu16.04.sh  | bash
+                        <br>sudo npm install -g a<br>sudo npm install -g http-server <br>npm install mongoskin <br>npm install mongodb
+                    </code>
+                </li>
+                <li>Step 14: Clone your own repository with the code for the server by inputting the following in your instance console <br><br>
+                    If public repo: <code>git clone https://github.com/tejaswigowda/ame498-598Fall2023.git</code><br><br>
+                    If private repo, generate a token in the setting of your GitHub: <code>git clone https://[token]@github.com/tejaswigowda/ame498-598Fall2023.git</code><br><br>
+                    <a href="./images/instance_setting.jpg" target="_blank">
+                        <img src="./images/instance_setting.jpg" class="center">
+                    </a>
+                </li>
+                <li>Step 15: Navigate to the folder that contains the server.js file in the instance by using the following command <br><br>
+                    <code>cd [ folder path to server.js ] </code>
+                </li>
+                <li>Step 16: Run the server.js file using the following command <br><br>
+                    <code>node server.js</code>
+                </li>
+            </ul>
+    
+            <strong>Viewing Data on Browser:</strong>
+            <ul>
+                <li>Open a browser tab and input the following in the address space:<br><br>
+                    <code>[EC2 Instance public IP]:[port]</code>
+                    <br><br>
+                    <a href="./images/browser_screenshot.jpg" target="_blank">
+                        <img src="./images/browser_screenshot.jpg" class="center">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </body>
+    
+    </html>
+    
+    
