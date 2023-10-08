@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var methodOverride = require('method-override');
 var MS = require("mongoskin");
-var hostname = process.env.HOSTNAME || 'localhost';
+var hostname = process.env.HOSTNAME || '52.201.208.66 ';
 var port = 1234;
 
 var t, h;
