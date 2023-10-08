@@ -12,7 +12,7 @@ const char* ssid = "Hotspot";
 const char* password = "longisland";
 
 //Your Domain name with URL path or IP address with path
-const char* serverName = "http://34.230.57.209:1234/sendData";
+const char* serverName = "http://52.201.208.66:1234/sendData";
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
