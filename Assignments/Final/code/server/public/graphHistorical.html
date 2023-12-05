@@ -13,10 +13,10 @@
         var selectedDuration = 60; // Default duration is 1 hour
 
         function getDataFromServer() {
-            var startDate = document.getElementById('datetimeSelect').value;
+            var startDateStr = document.getElementById('datetimeSelect').value;
+            var startDate = new Date(startDateStr);
             var endDate = new Date(startDate);
-            endDate.setMinutes(endDate.getMinutes() + selectedDuration);
-            var startDateStr = endDate.toISOString().replace('Z', ''); // Convert to ISO format without timezone
+            endDate.setMinutes(startDate.getMinutes() + selectedDuration);
 
             var url = "./getLatest?startDate=" + startDateStr;
             var callback = function (data) {
@@ -51,6 +51,7 @@
             }
             loadFile(url, callback);
         }
+
 
         function getTSInFormat(t) {
             var x = new Date(t);
