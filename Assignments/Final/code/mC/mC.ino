@@ -12,7 +12,7 @@ const char* ssid = "Uchit's 8 Pro";
 const char* password = "longisland";
 
 //Your Domain name with URL path or IP address with path
-const char* serverName = "http://54.196.142.234/setValue";
+const char* serverName = "http://54.196.142.234:1234/setValue";
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
@@ -28,7 +28,7 @@ String response;
 //      VCC: 5V or 3V
 //      GND: GND
 //      DATA: 21 or 25
-int pinDHT11 = 21;
+int pinDHT11 = 25;
 SimpleDHT11 dht11(pinDHT11);
 
 
