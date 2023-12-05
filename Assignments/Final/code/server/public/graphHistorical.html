@@ -71,19 +71,44 @@ function getTSInFormat(t)
 	return x.getFullYear() + "-" + (x.getMonth()+1) + "-" + x.getDate() + "T" + x.getHours() + ":" + x.getMinutes() + ":" + x.getSeconds();
 }
 function start(){
-    flatpickr("#datetimeSelect", { 
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
-        defaultDate: new Date() // Sets default date to now
-    });
+	flatpickr("#datetimeSelect", { enableTime: true,
+    dateFormat: "Y-m-d H:i"});
 
-    document.getElementById('duration').value = '60'; // default to last hour
+	var url = "./getLatest";
+	var callback = function(data){
+		var obj = JSON.parse(data);
+		var columns = [["x"],["Temperature"],["Humidity"]]
+		for(var i = 0; i < obj.length; i++){
+			var timestamp = parseInt(obj[i].time);
+			columns[0].push(getTSInFormat(timestamp));
+			columns[1].push(obj[i].t || 0);
+			columns[2].push(obj[i].h || 0);
+			lastAddedTS = timestamp;
+		}
+		chart = c3.generate({
+    	bindto: '#data',
+    	data: {
+				x: 'x',
+				xFormat: '%Y-%m-%dT%H:%M:%S',
+      	columns: columns
+    	},
+			axis: {
+        x: {
+            type: 'timeseries',
+            tick: {
+                format: '%H:%M:%S,%Y-%m-%d',
+            }
+        }
+    	}
+		});
 
-    getDataFromServer(); // Initial data load based on default values
 
-    setInterval(getDataFromServer, 2000); // Adjusted to use function reference
+	}
+	loadFile(url, callback);
+
+
+	setInterval("getDataFromServer()", 1000);
 }
-
 
 </script>
 </head>
