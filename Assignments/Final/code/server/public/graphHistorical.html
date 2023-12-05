@@ -15,6 +15,7 @@
     function getDataFromServer() {
         var url = "./getLatest";
         var callback = function(data){
+			console.log("Received data: ", data);
             var obj = JSON.parse(data);
             for(var i = 0; i < obj.length; i++){
                 var timestamp = parseInt(obj[i].time);
@@ -72,6 +73,8 @@
     }
 
     function updateDisplayedData() {
+		var selectedDate = document.getElementById('datetimeSelect').value;
+    	console.log("Selected Date: ", selectedDate);
         var selectedDate = document.getElementById('datetimeSelect').value;
         var duration = parseInt(document.getElementById('duration').value, 10) * 60 * 1000; // Convert duration to milliseconds
         var endTime = new Date(selectedDate).getTime() + duration;
