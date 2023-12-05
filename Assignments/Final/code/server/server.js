@@ -13,7 +13,7 @@ var VALUEtime = 0;
 
 var db = MS.db("mongodb://localhost:27017/sensorData")
 app.get("/", function (req, res) {
-    res.redirect("/index.html");
+    res.redirect("/graphHistorical.html");
 });
 
 app.get("/getAverage", function (req, res) {
