@@ -29,31 +29,32 @@ function processData(newData)
 }
 
 
-function getDataFromServer()
-{
-	var url = "./getLatest"
-	var callback = function(data)
-	try{
-		obj = JSON.parse(data);
-		var columns = [["x"],["Temperature"],["Humidity"]]
-		for(var i = 0; i < obj.length; i++){
-			var timestamp = parseInt(obj[i].time);
-			if(timestamp > lastAddedTS){
-				columns[0].push(getTSInFormat(timestamp));
-				columns[1].push(obj[i].t || 0);
-				columns[2].push(obj[i].h || 0);
-				lastAddedTS = timestamp;
-			}
-		}
+function getDataFromServer() {
+    var url = "./getLatest";
+    var callback = function(data) {
+        try {
+            obj = JSON.parse(data);
+            var columns = [["x"], ["Temperature"], ["Humidity"]];
+            for (var i = 0; i < obj.length; i++) {
+                var timestamp = parseInt(obj[i].time);
+                if (timestamp > lastAddedTS) {
+                    columns[0].push(getTSInFormat(timestamp));
+                    columns[1].push(obj[i].t || 0);
+                    columns[2].push(obj[i].h || 0);
+                    lastAddedTS = timestamp;
+                }
+            }
 
-		chart.flow({
-  		columns: columns
-		});
-	}catch(e) {
-        console.error("Error parsing data:", e);
-    }
-	loadFile(url, callback);
+            chart.flow({
+                columns: columns
+            });
+        } catch (e) {
+            console.error("Error parsing data:", e);
+        }
+    };
+    loadFile(url, callback);
 }
+
 function getTSInFormat(t)
 {
 	var x = new Date(t);
