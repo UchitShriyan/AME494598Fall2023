@@ -66,38 +66,37 @@ function calculateAverage(data)
 	var sum = data.reduce(function(a, b) { return a + b; });
 	return sum / data.length;
 }
-function filterAndDisplayData(startDate, endDate) 
-{
-	var filteredTemperature = [];
-	var filteredHumidity = [];
-	var filteredTimestamps = [];
+function filterAndDisplayData(startDate, endDate) {
+    var filteredTemperature = [];
+    var filteredHumidity = [];
+    var filteredTimestamps = [];
 
-	for (var i = 0; i < obj.length; i++) 
-	{
-		var timestamp = parseInt(obj[i].time);
-		var date = new Date(timestamp);
-		if (date >= startDate && date <= endDate) 
-		{
-			filteredTimestamps.push(getTSInFormat(timestamp));
-			filteredTemperature.push(obj[i].t || 0);
-			filteredHumidity.push(obj[i].h || 0);
-		}
-	}
+    for (var i = 0; i < obj.length; i++) {
+        var timestamp = parseInt(obj[i].time);
+        var date = new Date(timestamp);
+        if (date >= startDate && date <= endDate) {
+            filteredTimestamps.push(getTSInFormat(timestamp));
+            filteredTemperature.push(obj[i].t || 0);
+            filteredHumidity.push(obj[i].h || 0);
+        }
+    }
 
-	var avgTemperature = calculateAverage(filteredTemperature);
-	var avgHumidity = calculateAverage(filteredHumidity);
-	displayAverages(avgTemperature, avgHumidity);
+    var avgTemperature = calculateAverage(filteredTemperature);
+    var avgHumidity = calculateAverage(filteredHumidity);
+    displayAverages(avgTemperature, avgHumidity);
 
-	chart.load
-	({
-		columns: 
-		[
-			['x'].concat(filteredTimestamps),
-			['Temperature'].concat(filteredTemperature),
-			['Humidity'].concat(filteredHumidity)
-		]
-	});
+    // Check if 'chart' is defined before updating
+    if (chart) {
+        chart.load({
+            columns: [
+                ['x'].concat(filteredTimestamps),
+                ['Temperature'].concat(filteredTemperature),
+                ['Humidity'].concat(filteredHumidity)
+            ]
+        });
+    }
 }
+
 function displayAverages(temperature, humidity) 
 {
 	document.getElementById('avgTemperature').textContent = 'Average Temperature: ' + temperature.toFixed(2) + ' °C';
@@ -152,7 +151,7 @@ function start()
 	}
 	loadFile(url, callback);
 
-
+	getDataFromServer();
 	setInterval("getDataFromServer()", 1000);
 }
 
