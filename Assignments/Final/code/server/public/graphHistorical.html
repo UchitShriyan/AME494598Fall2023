@@ -1,113 +1,124 @@
+<!DOCTYPE html>
 <html>
 <head>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.8/c3.min.css" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.8/c3.min.js"></script>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.8/c3.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.8/c3.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src='asyncReq.js'></script>
+    <script>
+        var chart;
+        var lastAddedTS = 0;
+        var selectedDuration = 60; // Default duration is 1 hour
 
-<script src='asyncReq.js'></script>
-<script>
-var chart;
-var lastAddedTS = 0;
-// Function to calculate average
-function calculateAverage(data) {
-    let sumTemp = 0, sumHumidity = 0, count = 0;
-    data.forEach(item => {
-        sumTemp += item.t;
-        sumHumidity += item.h;
-        count++;
-    });
-    return {
-        avgTemp: sumTemp / count,
-        avgHumidity: sumHumidity / count
-    };
-}
+        function getDataFromServer() {
+            var startDate = document.getElementById('datetimeSelect').value;
+            var endDate = new Date(startDate);
+            endDate.setMinutes(endDate.getMinutes() + selectedDuration);
+            var startDateStr = endDate.toISOString().replace('Z', ''); // Convert to ISO format without timezone
 
-function getDataFromServer() {
-    var selectedTime = document.getElementById('datetimeSelect').value;
-    var duration = parseInt(document.getElementById('duration').value);
-    var endTime = new Date(selectedTime);
-    endTime.setMinutes(endTime.getMinutes() + duration);
+            var url = "./getLatest?startDate=" + startDateStr;
+            var callback = function (data) {
+                var obj = JSON.parse(data);
+                var columns = [["x"], ["Temperature"], ["Humidity"]]
+                for (var i = 0; i < obj.length; i++) {
+                    var timestamp = parseInt(obj[i].time);
+                    if (timestamp >= startDate && timestamp <= endDate) {
+                        columns[0].push(getTSInFormat(timestamp));
+                        columns[1].push(obj[i].t || 0);
+                        columns[2].push(obj[i].h || 0);
+                        lastAddedTS = timestamp;
+                    }
+                }
 
-    var url = "./getLatest"; // Modify this URL as needed to fetch data
-    var callback = function(data) {
-        try {
-            var obj = JSON.parse(data);
-            var filteredData = obj.filter(d => {
-                var timestamp = new Date(getTSInFormat(parseInt(d.time)));
-                return timestamp >= new Date(selectedTime) && timestamp <= endTime;
+                chart.load({
+                    columns: columns
+                });
+
+                // Calculate and display average temperature and humidity
+                var avgTemp = 0, avgHumidity = 0;
+                var count = columns[0].length - 1; // Exclude the "x" label
+                for (var i = 1; i < columns[1].length; i++) {
+                    avgTemp += columns[1][i];
+                    avgHumidity += columns[2][i];
+                }
+                avgTemp /= count;
+                avgHumidity /= count;
+
+                document.getElementById('avgTemp').textContent = 'Average Temperature: ' + avgTemp.toFixed(2) + '°C';
+                document.getElementById('avgHumidity').textContent = 'Average Humidity: ' + avgHumidity.toFixed(2) + '%';
+            }
+            loadFile(url, callback);
+        }
+
+        function getTSInFormat(t) {
+            var x = new Date(t);
+            return x.getFullYear() + "-" + (x.getMonth() + 1) + "-" + x.getDate() + "T" + x.getHours() + ":" + x.getMinutes() + ":" + x.getSeconds();
+        }
+
+        function start() {
+            flatpickr("#datetimeSelect", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i"
             });
 
-            if (filteredData.length === 0) {
-                console.log("No data to display for the selected time range.");
-                return;
+            document.getElementById('duration').addEventListener('change', function () {
+                selectedDuration = parseInt(this.value);
+                getDataFromServer();
+            });
+
+            var url = "./getLatest";
+            var callback = function (data) {
+                var obj = JSON.parse(data);
+                var columns = [["x"], ["Temperature"], ["Humidity"]]
+                for (var i = 0; i < obj.length; i++) {
+                    var timestamp = parseInt(obj[i].time);
+                    columns[0].push(getTSInFormat(timestamp));
+                    columns[1].push(obj[i].t || 0);
+                    columns[2].push(obj[i].h || 0);
+                    lastAddedTS = timestamp;
+                }
+                chart = c3.generate({
+                    bindto: '#data',
+                    data: {
+                        x: 'x',
+                        xFormat: '%Y-%m-%dT%H:%M:%S',
+                        columns: columns
+                    },
+                    axis: {
+                        x: {
+                            type: 'timeseries',
+                            tick: {
+                                format: '%H:%M:%S,%Y-%m-%d',
+                            }
+                        }
+                    }
+                });
+
+                getDataFromServer();
+                setInterval("getDataFromServer()", 1000);
             }
 
-            var averages = calculateAverage(filteredData);
-
-            document.getElementById('avgTemp').innerText = 'Average Temp: ' + averages.avgTemp.toFixed(2) + '°C';
-            document.getElementById('avgHumidity').innerText = 'Average Humidity: ' + averages.avgHumidity.toFixed(2) + '%';
-
-            var columns = [["x"], ["Temperature"], ["Humidity"]];
-            filteredData.forEach(item => {
-                columns[0].push(getTSInFormat(parseInt(item.time)));
-                columns[1].push(item.t || 0);
-                columns[2].push(item.h || 0);
-            });
-
-            chart.load({
-                columns: columns
-            });
-        } catch (e) {
-            console.error("Error processing data:", e);
+            loadFile(url, callback);
         }
-    };
-    loadFile(url, callback);
-}
-function getTSInFormat(t)
-{
-	var x = new Date(t);
-	return x.getFullYear() + "-" + (x.getMonth()+1) + "-" + x.getDate() + "T" + x.getHours() + ":" + x.getMinutes() + ":" + x.getSeconds();
-}
-function start(){
-    // Initialize the date picker with the current time
-    flatpickr("#datetimeSelect", { 
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
-        defaultDate: new Date() // Sets the picker to the current date and time
-    });
 
-    // Set a default duration, e.g., last hour (60 minutes)
-    document.getElementById('duration').value = '60';
-
-    // Load data based on the default values
-    getDataFromServer();
-
-    // Refresh data every 2000 milliseconds (2 seconds)
-    setInterval(getDataFromServer, 2000);
-}
-	loadFile(url, callback);
-
-
-	setInterval("getDataFromServer()", 1000);
-}
-
-</script>
+    </script>
 </head>
 
 <body style='text-align:center; font-family:Helvetica' onload='start()'>
-	<h1> Weather Historical Data </h1>
+<h1> Weather Historical Data </h1>
 
-	<input id='datetimeSelect' type='text'>
-	<select id='duration'>
-		<option value='10'> last 10 mins </option>
-		<option value='30'> last 30 mins </option>
-		<option value='60'> last hour </option>
-	</select>
-	<div id='data'></div>
-    <p id='avgTemp'></p>
-    <p id='avgHumidity'></p>
+<input id='datetimeSelect' type='text'>
+<select id='duration'>
+    <option value='10'> last 10 mins </option>
+    <option value='30'> last 30 mins </option>
+    <option value='60'> last hour </option>
+</select>
+<div id='data'></div>
+
+<p id='avgTemp'></p>
+<p id='avgHumidity'></p>
 
 </body>
 </html>
