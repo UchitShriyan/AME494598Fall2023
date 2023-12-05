@@ -32,27 +32,36 @@ function getDataFromServer() {
 
     var url = "./getLatest"; // Modify this URL as needed to fetch data
     var callback = function(data) {
-        var obj = JSON.parse(data);
-        var filteredData = obj.filter(d => {
-            var timestamp = new Date(getTSInFormat(parseInt(d.time)));
-            return timestamp >= new Date(selectedTime) && timestamp <= endTime;
-        });
+        try {
+            var obj = JSON.parse(data);
+            var filteredData = obj.filter(d => {
+                var timestamp = new Date(getTSInFormat(parseInt(d.time)));
+                return timestamp >= new Date(selectedTime) && timestamp <= endTime;
+            });
 
-        var averages = calculateAverage(filteredData);
+            if (filteredData.length === 0) {
+                console.log("No data to display for the selected time range.");
+                return;
+            }
 
-        document.getElementById('avgTemp').innerText = 'Average Temp: ' + averages.avgTemp.toFixed(2) + '°C';
-        document.getElementById('avgHumidity').innerText = 'Average Humidity: ' + averages.avgHumidity.toFixed(2) + '%';
+            var averages = calculateAverage(filteredData);
 
-        var columns = [["x"], ["Temperature"], ["Humidity"]];
-        filteredData.forEach(item => {
-            columns[0].push(getTSInFormat(parseInt(item.time)));
-            columns[1].push(item.t || 0);
-            columns[2].push(item.h || 0);
-        });
+            document.getElementById('avgTemp').innerText = 'Average Temp: ' + averages.avgTemp.toFixed(2) + '°C';
+            document.getElementById('avgHumidity').innerText = 'Average Humidity: ' + averages.avgHumidity.toFixed(2) + '%';
 
-        chart.load({
-            columns: columns
-        });
+            var columns = [["x"], ["Temperature"], ["Humidity"]];
+            filteredData.forEach(item => {
+                columns[0].push(getTSInFormat(parseInt(item.time)));
+                columns[1].push(item.t || 0);
+                columns[2].push(item.h || 0);
+            });
+
+            chart.load({
+                columns: columns
+            });
+        } catch (e) {
+            console.error("Error processing data:", e);
+        }
     };
     loadFile(url, callback);
 }
@@ -62,43 +71,17 @@ function getTSInFormat(t)
 	return x.getFullYear() + "-" + (x.getMonth()+1) + "-" + x.getDate() + "T" + x.getHours() + ":" + x.getMinutes() + ":" + x.getSeconds();
 }
 function start(){
-	flatpickr("#datetimeSelect", { enableTime: true,
-    dateFormat: "Y-m-d H:i"});
+    flatpickr("#datetimeSelect", { 
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        defaultDate: new Date() // Sets default date to now
+    });
 
-	var url = "./getLatest";
-	var callback = function(data){
-		var obj = JSON.parse(data);
-		var columns = [["x"],["Temperature"],["Humidity"]]
-		for(var i = 0; i < obj.length; i++){
-			var timestamp = parseInt(obj[i].time);
-			columns[0].push(getTSInFormat(timestamp));
-			columns[1].push(obj[i].t || 0);
-			columns[2].push(obj[i].h || 0);
-			lastAddedTS = timestamp;
-		}
-		chart = c3.generate({
-    	bindto: '#data',
-    	data: {
-				x: 'x',
-				xFormat: '%Y-%m-%dT%H:%M:%S',
-      	columns: columns
-    	},
-			axis: {
-        x: {
-            type: 'timeseries',
-            tick: {
-                format: '%H:%M:%S,%Y-%m-%d',
-            }
-        }
-    	}
-		});
+    document.getElementById('duration').value = '60'; // default to last hour
 
+    getDataFromServer(); // Initial data load based on default values
 
-	}
-	loadFile(url, callback);
-
-
-	setInterval("getDataFromServer()", 1000);
+    setInterval(getDataFromServer, 2000); // Adjusted to use function reference
 }
 
 
