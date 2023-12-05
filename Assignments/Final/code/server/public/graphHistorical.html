@@ -12,6 +12,12 @@ var chart;
 var lastAddedTS = 0;
 var obj = [];
 
+function getTSInFormat(t)
+{
+	var x = new Date(t);
+	return x.getFullYear() + "-" + (x.getMonth()+1) + "-" + x.getDate() + "T" + x.getHours() + ":" + x.getMinutes() + ":" + x.getSeconds();
+}
+
 function processData(newData) 
 {
         var columns = [["x"], ["Temperature"], ["Humidity"]];
@@ -55,11 +61,6 @@ function getDataFromServer() {
     loadFile(url, callback);
 }
 
-function getTSInFormat(t)
-{
-	var x = new Date(t);
-	return x.getFullYear() + "-" + (x.getMonth()+1) + "-" + x.getDate() + "T" + x.getHours() + ":" + x.getMinutes() + ":" + x.getSeconds();
-}
 function calculateAverage(data) 
 {
 	if (data.length === 0) return 0;
