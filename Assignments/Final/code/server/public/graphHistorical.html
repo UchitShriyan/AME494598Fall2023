@@ -34,20 +34,24 @@ function getDataFromServer() {
             }
         });
 
+        var avgTempElement = document.getElementById('avgTemp');
+        var avgHumidityElement = document.getElementById('avgHumidity');
+
         if (count > 0) {
             var avgTemp = tempSum / count;
             var avgHumidity = humidSum / count;
-            document.getElementById('avgTemp').textContent = 'Average Temperature: ' + avgTemp.toFixed(2) + '°C';
-            document.getElementById('avgHumidity').textContent = 'Average Humidity: ' + avgHumidity.toFixed(2) + '%';
+
+            if (avgTempElement) avgTempElement.textContent = 'Average Temperature: ' + avgTemp.toFixed(2) + '°C';
+            if (avgHumidityElement) avgHumidityElement.textContent = 'Average Humidity: ' + avgHumidity.toFixed(2) + '%';
         } else {
-            document.getElementById('avgTemp').textContent = 'No data available for selected range.';
-            document.getElementById('avgHumidity').textContent = '';
+            if (avgTempElement) avgTempElement.textContent = 'No data available for selected range.';
+            if (avgHumidityElement) avgHumidityElement.textContent = '';
         }
 
         chart.load({
             columns: columns
         });
-    };
+        };
     loadFile(url, callback);
 }
 
