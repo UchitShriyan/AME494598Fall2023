@@ -13,7 +13,7 @@ This technology extends beyond remote control systems, offering potential applic
 
 ### Demonstration
 Watch our project in action and see how the gesture-controlled car operates seamlessly in a real-world setting. Check out our demo video here: 
-[!Video](https://youtu.be/zzCrpVZPffA)
+[![Video](https://img.youtube.com/vi/zzCrpVZPffA/maxresdefault.jpg)](https://youtu.be/zzCrpVZPffA)
 
 ### Future Work
 The project lays the groundwork for future enhancements, including further refinement of vehicle autonomy and exploration into advanced AIoT systems. Future developments may focus on integrating more complex gesture recognition algorithms, enhancing the system's responsiveness in varied environments, and scaling the technology for broader applications. We aim to continuously improve the user experience and expand the capabilities of gesture-controlled systems in various sectors.
