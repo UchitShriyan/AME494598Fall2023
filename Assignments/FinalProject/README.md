@@ -12,7 +12,7 @@ Robust Vehicle Control: Integrates WeMos D1 R1 microcontroller with motor driver
 This technology extends beyond remote control systems, offering potential applications in various fields where remote and intuitive control is beneficial, such as in hazardous environments or inaccessible locations. It could revolutionize the way we interact with machines in sectors like healthcare for remote surgeries, in space exploration for controlling rovers, and in the automotive industry for enhanced driver-assist systems. Its adaptability and ease of use make it a promising tool for improving accessibility and interaction in diverse applications.
 
 ### Demonstration
-Watch our project in action and see how the gesture-controlled car operates seamlessly in a real-world setting. Check out our demo video here: 
+Watch our project in action and see how the gesture-controlled car operates seamlessly in a real-world setting. Check out our demo video by clicking on the image below: 
 [![Video](https://img.youtube.com/vi/zzCrpVZPffA/maxresdefault.jpg)](https://youtu.be/zzCrpVZPffA)
 
 ### Future Work
