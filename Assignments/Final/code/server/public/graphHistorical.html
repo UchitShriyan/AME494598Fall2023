@@ -16,7 +16,7 @@ function getDataFromServer() {
     var startDate = new Date(startDateStr);
     var endDate = new Date(startDate.getTime() + duration * 60000);
 
-    var url = "./getLatest";
+    var url = "./getLatest"; // Adjust the URL as needed
     var callback = function(data) {
         var obj = JSON.parse(data);
         var columns = [["x"], ["Temperature"], ["Humidity"]];
@@ -51,8 +51,8 @@ function getDataFromServer() {
     loadFile(url, callback);
 }
 
-document.getElementById('duration').addEventListener('change', getDataFromServer);
 document.getElementById('datetimeSelect').addEventListener('change', getDataFromServer);
+document.getElementById('duration').addEventListener('change', getDataFromServer);
 function getTSInFormat(t)
 {
 	var x = new Date(t);
